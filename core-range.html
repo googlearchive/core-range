@@ -99,7 +99,7 @@ One can build a progress bar using `core-range` like this:
     
     update: function() {
       this.validateValue();
-      this.ratio = this.calcRatio(this.value) * 100;
+      this.ratio = Math.round(this.calcRatio(this.value) * 100);
     }
     
   });
