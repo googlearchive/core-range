@@ -24,85 +24,91 @@ One can build a progress bar using `core-range` like this:
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="core-ranged.html">
 
-<polymer-element name="core-range" attributes="value min max step ratio">
+<dom-module id="core-range">
 <script>
 
-  Polymer('core-range', {
+    Polymer({
+        is: 'core-range',
+
+        mixins: [Polymer.Core.Ranged],
+
+        properties: {
+            /**
+             * The number that represents the current value.
+             *
+             * @attribute value
+             * @type number
+             * @default 0
+             */
+            value: {
+                type: Number,
+                value: 0,
+                notify: true,
+                reflectToAttribute: true,
+            },
+
+            /**
+             * The number that indicates the minimum value of the range.
+             *
+             * @attribute min
+             * @type number
+             * @default 0
+             */
+            min: {
+                type: Number,
+                value: 0,
+                notify: true,
+                reflectToAttribute: true,
+            },
     
-    /**
-     * The number that represents the current value.
-     *
-     * @attribute value
-     * @type number
-     * @default 0
-     */
-    value: 0,
+            /**
+             * The number that indicates the maximum value of the range.
+             *
+             * @attribute max
+             * @type number
+             * @default 100
+             */
+            max: {
+                type: Number,
+                value: 100,
+                notify: true,
+                reflectToAttribute: true,
+            },
+
+            /**
+             * Specifies the value granularity of the range's value.
+             *
+             * @attribute step
+             * @type number
+             * @default 1
+             */
+            step: {
+                type: Number,
+                value: 1,
+                notify: true,
+                reflectToAttribute: true,
+            },
+
+            /**
+             * Returns the ratio of the value.
+             *
+             * @attribute ratio
+             * @type number
+             * @default 0
+             */
+            ratio: {
+                type: Number,
+                value: 0,
+                notify: true,
+                reflectToAttribute: true,
+            }
+        },
     
-    /**
-     * The number that indicates the minimum value of the range.
-     *
-     * @attribute min
-     * @type number
-     * @default 0
-     */
-    min: 0,
-    
-    /**
-     * The number that indicates the maximum value of the range.
-     *
-     * @attribute max
-     * @type number
-     * @default 100
-     */
-    max: 100,
-    
-    /**
-     * Specifies the value granularity of the range's value.
-     *
-     * @attribute step
-     * @type number
-     * @default 1
-     */
-    step: 1,
-    
-    /**
-     * Returns the ratio of the value.
-     *
-     * @attribute ratio
-     * @type number
-     * @default 0
-     */
-    ratio: 0,
-    
-    observe: {
-      'value min max step': 'update'
-    },
-    
-    calcRatio: function(value) {
-      return (this.clampValue(value) - this.min) / (this.max - this.min);
-    },
-    
-    clampValue: function(value) {
-      return Math.min(this.max, Math.max(this.min, this.calcStep(value)));
-    },
-    
-    calcStep: function(value) {
-      return this.step ? (Math.round(value / this.step) / (1 / this.step)) : value;
-    },
-    
-    validateValue: function() {
-      var v = this.clampValue(this.value);
-      this.value = this.oldValue = isNaN(v) ? this.oldValue : v;
-      return this.value !== v;
-    },
-    
-    update: function() {
-      this.validateValue();
-      this.ratio = this.calcRatio(this.value) * 100;
-    }
-    
-  });
-  
+        observers: {
+            'value min max step': 'update'
+        }
+    });
 </script>
-</polymer-element>
+</dom-module>

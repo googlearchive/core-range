@@ -1,0 +1,31 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+
+    Polymer.Core = Polymer.Core || {};
+    Polymer.Core.Ranged = {
+
+        calcRatio: function(value) {
+            return (this.clampValue(value) - this.min) / (this.max - this.min);
+        },
+
+        clampValue: function(value) {
+            return Math.min(this.max, Math.max(this.min, this.calcStep(value)));
+        },
+
+        calcStep: function(value) {
+            return this.step ? (Math.round(value / this.step) / (1 / this.step)) : value;
+        },
+
+        validateValue: function() {
+            var v = this.clampValue(this.value);
+            this.value = this.oldValue = isNaN(v) ? this.oldValue : v;
+            return this.value !== v;
+        },
+
+        update: function() {
+            this.validateValue();
+            this.ratio = this.calcRatio(this.value) * 100;
+        }
+    }
+</script>
