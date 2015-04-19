@@ -16,6 +16,7 @@
     
     <link rel="import" href="core-range.html">
     <link rel="import" href="../core-input/core-input.html">
+    <link rel="import" href="../layout/layout.html">
     
     <style>
     
@@ -26,12 +27,9 @@
     </style>
   </head>
   
-  <body unresolved>
+  <body>
     
-    <polymer-element name="x-progressbar" noscript attributes="value min max">
-    
-      <template>
-      
+    <dom-module name="x-progressbar">
         <style>
           
           :host {
@@ -57,16 +55,97 @@
           }
           
         </style>
+
+      <template>
         
         <core-range min="{{min}}" max="{{max}}" value="{{value}}" ratio="{{ratio}}"></core-range>
         
-        <div class="progress" horizontal center layout _style="width: {{ratio}}%;">
+        <div id="wrapper" class="horizontal center layout progress" _style="width: {{ratio}}%;">
           <div class="progress-value">{{ratio}}%</div>
         </div>
         
       </template>
-      
-    </polymer-element>
+      <script>
+        Polymer({
+        is: 'x-progressbar',
+
+        properties: {
+            /**
+             * The number that represents the current value.
+             *
+             * @attribute value
+             * @type number
+             * @default 0
+             */
+            value: {
+                type: Number,
+                value: 0,
+                notify: true,
+                reflectToAttribute: true,
+            },
+
+            /**
+             * The number that indicates the minimum value of the range.
+             *
+             * @attribute min
+             * @type number
+             * @default 0
+             */
+            min: {
+                type: Number,
+                value: 0,
+                notify: true,
+                reflectToAttribute: true,
+            },
+
+            /**
+             * The number that indicates the maximum value of the range.
+             *
+             * @attribute max
+             * @type number
+             * @default 100
+             */
+            max: {
+                type: Number,
+                value: 100,
+                notify: true,
+                reflectToAttribute: true,
+            },
+
+            /**
+             * Specifies the value granularity of the range's value.
+             *
+             * @attribute step
+             * @type number
+             * @default 1
+             */
+            step: {
+                type: Number,
+                value: 1,
+                notify: true,
+                reflectToAttribute: true,
+            },
+
+            /**
+             * Returns the ratio of the value.
+             *
+             * @attribute ratio
+             * @type number
+             * @default 0
+             */
+            ratio: {
+                type: Number,
+                notify: true,
+                reflectToAttribute: true,
+                observer: 'updateProgressValue'
+            }
+        },
+        updateProgressValue: function (ratio) {
+            this.$.wrapper.style.width = ratio + "%";
+        }
+    });
+      </script>
+    </dom-module>
     
     <x-progressbar min="0" max="200" value="120"></x-progressbar>
     
